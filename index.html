@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💌 for Cia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Klee+One&family=Satisfy&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:    #f43f72;
+      --blush:   #ffd6e0;
+      --petal:   #ffe4ec;
+      --cream:   #fff8f0;
+      --deep:    #2b1022;
+      --muted:   #a0556e;
+      --accent:  #ff85a1;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #fff0f5 0%, #ffe4ec 40%, #ffd6e0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Klee One', cursive;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── Floating petals background ── */
+    #petals {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      top: -60px;
+      font-size: 1.4rem;
+      animation: fall linear infinite;
+      opacity: 0.55;
+      user-select: none;
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0.55; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ── Intro overlay ── */
+    #intro {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: var(--deep);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      transition: opacity 0.8s ease;
+    }
+
+    #intro h1 {
+      font-family: 'Satisfy', cursive;
+      font-size: clamp(2rem, 8vw, 4rem);
+      color: var(--blush);
+      text-align: center;
+      line-height: 1.3;
+      padding: 0 20px;
+    }
+
+    #intro p {
+      color: var(--accent);
+      font-size: 0.95rem;
+      opacity: 0.8;
+    }
+
+    #startBtn {
+      margin-top: 12px;
+      padding: 14px 44px;
+      background: var(--rose);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-family: 'Klee One', cursive;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 8px 28px rgba(244,63,114,0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    #startBtn:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 14px 36px rgba(244,63,114,0.5);
+    }
+
+    #startBtn:active { transform: scale(0.97); }
+
+    /* ── Main card ── */
+    #wrapper {
+      position: relative;
+      z-index: 10;
+      width: min(480px, 94vw);
+    }
+
+    #card {
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 32px;
+      padding: 36px 30px 32px;
+      box-shadow:
+        0 4px 0 rgba(244,63,114,0.15),
+        0 20px 60px rgba(244,63,114,0.18),
+        0 1px 0 rgba(255,255,255,0.9) inset;
+      border: 1.5px solid rgba(255,255,255,0.6);
+      text-align: center;
+      min-height: 300px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative top border stripe */
+    #card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rose), #ff85a1, var(--rose));
+      border-radius: 32px 32px 0 0;
+    }
+
+    /* slide animation */
+    .slide-in {
+      animation: slideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(24px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── Typography inside card ── */
+    #card h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--deep);
+      font-size: 2rem;
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+
+    #card p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.85;
+      margin-bottom: 20px;
+    }
+
+    .love {
+      font-size: 3.5rem;
+      animation: pulse 1.6s ease-in-out infinite;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.18); }
+    }
+
+    /* ── Images ── */
+    #card img {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 8px 28px rgba(244,63,114,0.2);
+      margin-bottom: 22px;
+      display: block;
+      animation: fadeImg 0.6s ease both;
+    }
+
+    @keyframes fadeImg {
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-block;
+      padding: 13px 38px;
+      background: linear-gradient(135deg, var(--rose), #ff6b9d);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-family: 'Klee One', cursive;
+      font-size: 1.05rem;
+      cursor: pointer;
+      box-shadow: 0 6px 22px rgba(244,63,114,0.38);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background 0.2s;
+      border-radius: inherit;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 12px 32px rgba(244,63,114,0.46);
+    }
+
+    .btn:hover::after { background: rgba(255,255,255,0.12); }
+    .btn:active { transform: scale(0.97); }
+
+    /* ── Runaway button area ── */
+    #btn-arena {
+      position: relative;
+      height: 130px;
+      margin-top: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #yesBtn {
+      position: relative;
+      z-index: 2;
+    }
+
+    #runBtn {
+      position: absolute;
+      background: linear-gradient(135deg, #e2e2e2, #ccc);
+      color: #888;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      transition: background 0.3s, color 0.3s;
+      z-index: 1;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+    }
+
+    #runBtn:hover { background: linear-gradient(135deg, #ccc, #bbb); }
+
+    /* ── Accepted screen ── */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    .accept-msg {
+      animation: bounceIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes bounceIn {
+      from { opacity: 0; transform: scale(0.7); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── Progress dots ── */
+    #dots {
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 18px;
+    }
+
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(244,63,114,0.22);
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .dot.active {
+      background: var(--rose);
+      transform: scale(1.35);
+    }
+
+    /* ── Label tag ── */
+    .tag {
+      display: inline-block;
+      background: var(--petal);
+      color: var(--rose);
+      font-size: 0.78rem;
+      padding: 4px 14px;
+      border-radius: 50px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(244,63,114,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<div id="petals"></div>
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Intro overlay -->
+<div id="intro">
+  <h1>Ada sesuatu<br>buat kamu 💌</h1>
+  <p>tap untuk mulai</p>
+  <button id="startBtn" onclick="startLove()">Buka 🌸</button>
+</div>
+
+<!-- Card -->
+<div id="wrapper">
+  <div id="card"></div>
+  <div id="dots">
+    <div class="dot active" id="d1"></div>
+    <div class="dot" id="d2"></div>
+    <div class="dot" id="d3"></div>
+    <div class="dot" id="d4"></div>
+    <div class="dot" id="d5"></div>
+    <div class="dot" id="d6"></div>
+    <div class="dot" id="d7"></div>
+    <div class="dot" id="d8"></div>
+  </div>
+</div>
+
+<audio id="music" loop>
+  <source src="gluesong.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  /* ── Floating petals ── */
+  const petalContainer = document.getElementById('petals');
+  const symbols = ['🌸','💗','🌷','💕','✨','🩷','💖','🌺'];
+  for (let i = 0; i < 22; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    p.style.cssText = `
+      left: ${Math.random() * 100}%;
+      font-size: ${0.9 + Math.random() * 1.2}rem;
+      animation-duration: ${6 + Math.random() * 8}s;
+      animation-delay: ${-Math.random() * 10}s;
+      opacity: ${0.3 + Math.random() * 0.4};
+    `;
+    petalContainer.appendChild(p);
+  }
+
+  const music = document.getElementById('music');
+
+  function setDot(n) {
+    for (let i = 1; i <= 8; i++) {
+      document.getElementById('d' + i)?.classList.toggle('active', i === n);
+    }
+  }
+
+  function render(html, dot) {
+    const card = document.getElementById('card');
+    card.innerHTML = html;
+    card.querySelectorAll('.slide-in').forEach(el => {
+      el.style.animation = 'none';
+      void el.offsetHeight;
+      el.style.animation = '';
+    });
+    if (dot) setDot(dot);
+  }
+
+  /* ── SLIDE 1 ── */
+  function startLove() {
+    music.play().catch(() => {});
+    const intro = document.getElementById('intro');
+    intro.style.opacity = '0';
+    setTimeout(() => intro.style.display = 'none', 800);
+
+    render(`
+      <div class="slide-in">
+        <span class="tag">memory #1</span>
+        <p style="font-size:1rem;color:#c04070;margin-bottom:18px;line-height:1.9;">
+          btw ini firstt chatt kita tauu 🥺💗
+        </p>
+        <img src="firstchat.jpg" alt="first chat screenshot">
+        <button class="btn" onclick="nextSlide2()">Next 💕</button>
+      </div>
+    `, 1);
+  }
+
+  /* ── SLIDE 2 ── */
+  function nextSlide2() {
+    render(`
+      <div class="slide-in">
+        <span class="tag">confession</span>
+        <p style="font-size:1rem;color:#c04070;margin-bottom:20px;line-height:1.9;">
+          kalau kamu tau,<br>
+          inii yang aku rasain tiap chatan sama kamu 😵‍💫💘
+        </p>
+        <img src="meme1.jpg" alt="meme">
+        <button class="btn" onclick="nextSlide3()">Next 💗</button>
+      </div>
+    `, 2);
+  }
+
+  /* ── SLIDE 3 ── */
+  function nextSlide3() {
+    render(`
+      <div class="slide-in">
+        <span class="tag">literally me</span>
+        <img src="meme2.jpg" alt="meme">
+        <button class="btn" onclick="nextSlide4()">Next 💖</button>
+      </div>
+    `, 3);
+  }
+
+  /* ── SLIDE 4 ── */
+  function nextSlide4() {
+    render(`
+      <div class="slide-in">
+        <span class="tag">no cap</span>
+        <img src="meme3.jpg" alt="meme">
+        <button class="btn" onclick="nextSlide5()">Next 💘</button>
+      </div>
+    `, 4);
+  }
+
+  /* ── SLIDE 5 ── */
+  function nextSlide5() {
+    render(`
+      <div class="slide-in">
+        <span class="tag">every time</span>
+        <img src="meme4.jpg" alt="meme">
+        <button class="btn" onclick="nextSlide6()">Next 💞</button>
+      </div>
+    `, 5);
+  }
+
+  /* ── SLIDE 6 ── */
+  function nextSlide6() {
+    render(`
+      <div class="slide-in">
+        <span class="love">💖</span>
+        <h2>Ciaaa</h2>
+        <p>
+          Aku udah nyaman banget sama kamu,<br>
+          dan sekarang rasanya ini waktu yang tepat<br>
+          buat kita jalanin semuanya dengan lebih serius.
+        </p>
+        <button class="btn" onclick="nextSlide7()">lanjut 👉🏻👈🏻</button>
+      </div>
+    `, 6);
+  }
+
+  /* ── SLIDE 7 ── */
+  function nextSlide7() {
+    render(`
+      <div class="slide-in">
+        <span class="love">💗</span>
+        <h2 style="font-family:'Satisfy',cursive;font-size:3.2rem;margin:20px 0 30px;">So...</h2>
+        <button class="btn" onclick="nextSlide8()">💌</button>
+      </div>
+    `, 7);
+  }
+
+  /* ── SLIDE 8 ── */
+  function nextSlide8() {
+    render(`
+      <div class="slide-in">
+        <span class="love">💘</span>
+        <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.7rem,6vw,2.3rem);line-height:1.4;margin-bottom:8px;">
+          Wanna be<br><em>my girlfriend?</em> 👉🏻👈🏻
+        </h2>
+        <div id="btn-arena">
+          <button class="btn" id="yesBtn" onclick="accepted()">Yes 💕</button>
+          <button class="btn" id="runBtn" onclick="accepted()">Yes 💗</button>
+        </div>
+      </div>
+    `, 8);
+    moveButton();
+  }
+
+  /* ── Runaway button logic ── */
+  function moveButton() {
+    const arena = document.getElementById('btn-arena');
+    const run = document.getElementById('runBtn');
+    if (!arena || !run) return;
+
+    const W = arena.offsetWidth;
+    const H = arena.offsetHeight;
+    const bW = run.offsetWidth;
+    const bH = run.offsetHeight;
+
+    function randomPos() {
+      return {
+        x: Math.random() * (W - bW),
+        y: Math.random() * (H - bH),
+      };
+    }
+
+    function applyPos({ x, y }) {
+      run.style.left = x + 'px';
+      run.style.top  = y + 'px';
+      run.style.right = 'auto';
+      run.style.transform = 'none';
+    }
+
+    applyPos({ x: W - bW, y: (H - bH) / 2 });
+
+    arena.addEventListener('mousemove', (e) => {
+      const rect = arena.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const rx = parseFloat(run.style.left) + bW / 2;
+      const ry = parseFloat(run.style.top)  + bH / 2;
+      const dist = Math.hypot(mx - rx, my - ry);
+      if (dist < 90) applyPos(randomPos());
+    });
+
+    /* Mobile: escape on touchstart */
+    arena.addEventListener('touchstart', () => applyPos(randomPos()), { passive: true });
+  }
+
+  /* ── Accepted ── */
+  function accepted() {
+    document.getElementById("card").innerHTML = `
+
+    <div class="love">🥳💘</div>
+
+    <h2 style="
+      font-family:'Sacramento',cursive;
+      font-size:40px;
+      color:#ff2e63;
+      margin-bottom:15px;
+    ">
+      Yeaaayy!!
+    </h2>
+
+    <p style="
+      line-height:1.9;
+      font-size:17px;
+      color:#444;
+    ">
+      Mulai sekarang kamuu jadii milikkuu😋
+      ayoo kita buat hubungan inii jadi lebihh seruu dann romantiss HAHAHAHAA💗
+      <br><br>
+      Thank you for saying yess ciaayangg💗
+    </p>
+
+  `;
+
+    launchConfetti();
+  }
+
+  /* ── Confetti ── */
+  function launchConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ['#f43f72','#ff85a1','#ffd6e0','#ffe082','#b5ead7','#c7ceea'];
+    const pieces = Array.from({ length: 120 }, () => ({
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * canvas.height * 0.5,
+      r: 4 + Math.random() * 6,
+      c: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 3,
+      vy: 2 + Math.random() * 3,
+      rot: Math.random() * 360,
+      vr: (Math.random() - 0.5) * 6,
+    }));
+
+    let frame;
+    let elapsed = 0;
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const p of pieces) {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot * Math.PI / 180);
+        ctx.fillStyle = p.c;
+        ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
+        ctx.restore();
+        p.x  += p.vx;
+        p.y  += p.vy;
+        p.rot += p.vr;
+        p.vy += 0.06;
+        if (p.y > canvas.height + 20) p.y = -20;
+      }
+      elapsed++;
+      if (elapsed < 300) frame = requestAnimationFrame(draw);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    draw();
+  }
+</script>
+</body>
+</html>
